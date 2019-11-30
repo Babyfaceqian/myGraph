@@ -1,0 +1,55 @@
+{
+  "name": "cy-arch",
+  "version": "1.0.0",
+  "description": "A demo of front end architecture of cy",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "webpack-dev-server --config webpack/webpack.dev.js",
+    "build": "webpack --config webpack/webpack.prod.js",
+    "lint": "eslint ./src/index.jsx --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Babyfaceqian/frontend-arch.git"
+  },
+  "author": "zhangqian",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Babyfaceqian/frontend-arch/issues"
+  },
+  "homepage": "https://github.com/Babyfaceqian/frontend-arch#readme",
+  "dependencies": {
+    "@babel/runtime": "^7.7.4",
+    "mobx": "^5.15.0",
+    "mobx-react": "^6.1.4",
+    "react": "^16.12.0",
+    "react-dnd": "^9.5.1",
+    "react-dnd-mouse-backend": "^1.0.0-rc.2",
+    "react-dom": "^16.4.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/plugin-transform-runtime": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.0.5",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.7.1",
+    "eslint-loader": "^3.0.2",
+    "eslint-plugin-react": "^7.10.0",
+    "html-webpack-plugin": "^3.2.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.9.0",
+    "webpack-merge": "^4.2.1"
+  }
+}

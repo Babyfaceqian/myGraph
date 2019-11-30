@@ -1,0 +1,10 @@
+.sideBar {
+  position: absolute;
+  top: 50px;
+}
+.left {
+  left: 10px;
+}
+.right {
+  right: 10px;
+}

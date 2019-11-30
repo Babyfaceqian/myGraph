@@ -1,0 +1,19 @@
+.format {
+  width: 150px;
+  background: #EEE;
+  padding: 10px;
+}
+.inlineBox {
+  display: inline-flex;
+  justify-content: space-between;
+  padding: 4px 6px;
+  width: 100%;
+}
+.inlineBox > label {
+}
+.inlineBox > input {
+  width: 80px;
+}
+.inlineBox > select {
+  width: 80px;
+}
