@@ -30,6 +30,7 @@ export default function Anchor({ cx, cy, r = 5, onDrop, cursor, preview, id }) {
       
       if (monitor.didDrop()) {
         let offset = monitor.getDropResult();
+        console.log('end offset', offset);
         let _cx = offset.x - item.ox;
         let _cy = offset.y - item.oy;
         onDrop(_cx, _cy);

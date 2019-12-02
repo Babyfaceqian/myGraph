@@ -20,9 +20,9 @@ function Circle({ type, id, textId, cx, cy, r, fill, fillOpacity, stroke, stroke
         r,
         ox: offset.x - cx,
         oy: offset.y - cy,
-        preview: (offset) => {
-          let cx = offset.x + r;
-          let cy = offset.y + r;
+        preview: (offset, item) => {
+          let cx = offset.x - item.ox;
+          let cy = offset.y - item.oy;
           return (<g >
             <circle cx={cx} cy={cy} r={r} fill={fill} stroke={stroke} fillOpacity={fillOpacity} strokeWidth={strokeWidth} strokeOpacity={strokeOpacity}  ></circle>
           </g>)

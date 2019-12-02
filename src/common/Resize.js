@@ -43,6 +43,7 @@ const Resize = inject("store")(observer(({ store }) => {
       return anchors.map((placement, i) => {
         let { cx, cy } = placement;
         const preview = function (offset, item) {
+          console.log('preview offset', offset);
           let cx = offset.x - item.ox;
           let cy = offset.y - item.oy;
           let changes = getDimensionWhenResize(shapeType)(cx, cy, i, shape, anchors);

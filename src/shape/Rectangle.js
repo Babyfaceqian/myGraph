@@ -19,9 +19,9 @@ function Rectangle({ type, id, textId, x, y, rx, ry, fill, fillOpacity, width, h
         textId,
         ox: offset.x - x,
         oy: offset.y - y,
-        preview: (offset) => {
-          let x = offset.x;
-          let y = offset.y;
+        preview: (offset, item) => {
+          let x = offset.x - item.ox;
+          let y = offset.y - item.oy;
           return (<g>
             <rect x={x} y={y} rx={rx} ry={ry} width={width} height={height} fill={fill} stroke={stroke} fillOpacity={fillOpacity} strokeWidth={strokeWidth} strokeOpacity={strokeOpacity}  ></rect>
           </g>)

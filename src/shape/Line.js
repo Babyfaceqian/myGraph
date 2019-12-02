@@ -24,10 +24,10 @@ export default function Text({ type, id, textId, x1, y1, x2, y2, stroke, strokeW
         oy2,
         x1, y1, x2, y2,
         preview: (offset, item) => {
-          let x2 = offset.x + item.x2 - item.x1;
-          let y2 = offset.y + item.y2 - item.y1;
-          let x1 = offset.x;
-          let y1 = offset.y;
+          let x1 = offset.x - item.ox1;
+          let y1 = offset.y - item.oy1;
+          let x2 = offset.x - item.ox2;
+          let y2 = offset.y - item.oy2;
           return (
             <line
               x1={x1}
