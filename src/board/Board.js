@@ -11,6 +11,8 @@ import { toJS } from 'mobx';
 import DragPreview from '../shape/DragPreview';
 import { getTextDimension } from '../utils';
 import Link from '../common/Link';
+import ArrowLine from '../shape/ArrowLine';
+import Defs from '../shape/Defs';
 
 function handleShapeClick(e, id, store) {
   console.log('EVENT: handleShapeClick')
@@ -90,14 +92,16 @@ const Board = inject("store")(observer(({ store }) => {
         case ShapeTypes.ANCHOR_RESIZE:
           return offset;
         case ShapeTypes.LINE:
-          let x1 = offset.x - item.ox1;
-          let y1 = offset.y - item.oy1;
-          let x2 = offset.x - item.ox2;
-          let y2 = offset.y - item.oy2;
-          store.modifyShape({
-            id: item.id,
-            x1, y1, x2, y2
-          })
+          {
+            let x1 = offset.x - item.ox1;
+            let y1 = offset.y - item.oy1;
+            let x2 = offset.x - item.ox2;
+            let y2 = offset.y - item.oy2;
+            store.modifyShape({
+              id: item.id,
+              x1, y1, x2, y2
+            })
+          }
         // if (item.textId) {
         //   let textDimension = getTextDimension(type)({ x1,y1,x2,y2 });
         //   item.textId && store.modifyShape({
@@ -106,6 +110,17 @@ const Board = inject("store")(observer(({ store }) => {
         //     y: textDimension.y
         //   });
         // }
+        case ShapeTypes.ARROW_LINE:
+          {
+            let x1 = offset.x - item.ox1;
+            let y1 = offset.y - item.oy1;
+            let x2 = offset.x - item.ox2;
+            let y2 = offset.y - item.oy2;
+            store.modifyShape({
+              id: item.id,
+              x1, y1, x2, y2
+            })
+          }
       }
     },
     collect: monitor => {
@@ -132,11 +147,14 @@ const Board = inject("store")(observer(({ store }) => {
             return <Text key={key} {...shape} />;
           case ShapeTypes.LINE:
             return <Line key={key} {...shape} onClick={(e) => handleShapeClick(e, key, store)} />;
+          case ShapeTypes.ARROW_LINE:
+            return <ArrowLine key={key} {...shape} onClick={(e) => handleShapeClick(e, key, store)} />;
         }
       })}
       <Resize />
       <Link />
       <DragPreview />
+      <Defs />
     </svg>
   );
 }))

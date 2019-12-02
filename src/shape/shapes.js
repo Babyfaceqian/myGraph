@@ -70,6 +70,22 @@ function getLine() {
   }
 }
 
+function getArrowLine() {
+  return {
+    type: null,
+    id: null,
+    x1: 100,
+    y1: 100,
+    x2: 200,
+    y2: 200,
+    text: '文本',
+    fontSize: 12,
+    stroke: '#000000',
+    strokeWidth: 1,
+    strokeOpacity: 1,
+  }
+}
+
 export function getShape(type) {
   switch (type) {
     case ShapeTypes.RECTANGLE:
@@ -80,5 +96,7 @@ export function getShape(type) {
       return getText;
     case ShapeTypes.LINE:
       return getLine;
+    case ShapeTypes.ARROW_LINE:
+      return getArrowLine
   }
 }

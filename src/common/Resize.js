@@ -130,6 +130,42 @@ const Resize = inject("store")(observer(({ store }) => {
         return (
           <AnchorResize key={i} id={id} cursor={'pointer'} cx={cx} cy={cy} onDrop={(cx, cy) => onDrop(cx, cy, ShapeTypes.LINE, i)} preview={preview} />
         )
+      });
+    case ShapeTypes.ARROW_LINE:
+      return anchors.map((placement, i) => {
+        let { cx, cy } = placement;
+        const preview = function (offset, item) {
+          let cx = offset.x - item.ox;
+          let cy = offset.y - item.oy;
+          let changes = getDimensionWhenResize(shapeType)(cx, cy, i, shape, anchors);
+          let newShape = { ...shape, ...changes };
+          let newAnchors = getResizeAnchorPosition(shapeType)(newShape);
+          let { x1, y1, x2, y2, stroke, strokeWidth, strokeOpacity } = newShape;
+          return (
+            [
+              <line
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+                stroke={stroke}
+                strokeWidth={strokeWidth}
+                strokeOpacity={strokeOpacity}
+                markerEnd={'url(#arrow)'}
+              />
+            ].concat(newAnchors.map((placement, i) => {
+              let { cx, cy } = placement;
+              return (
+                <g cursor={'pointer'}>
+                  <circle cx={cx} cy={cy} r={5} fill={"blue"} fillOpacity={0.5}></circle>
+                </g>
+              )
+            })
+            ))
+        };
+        return (
+          <AnchorResize key={i} id={id} cursor={'pointer'} cx={cx} cy={cy} onDrop={(cx, cy) => onDrop(cx, cy, ShapeTypes.LINE, i)} preview={preview} />
+        )
       })
   }
 }))

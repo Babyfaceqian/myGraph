@@ -38,6 +38,9 @@ export default class Store {
       case ShapeTypes.LINE:
         obj = getShape(type)();
         break;
+      case ShapeTypes.ARROW_LINE:
+        obj = getShape(type)();
+        break;
     }
     this.shapes[id] = { ...obj, ...payload, id };
   }

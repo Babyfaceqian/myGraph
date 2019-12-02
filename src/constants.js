@@ -4,5 +4,6 @@ export const ShapeTypes = {
   ANCHOR_RESIZE: 'anchorResize',
   ANCHOR_LINK: 'anchorLink',
   TEXT: 'text',
-  LINE: 'line'
+  LINE: 'line',
+  ARROW_LINE: 'arrowLine'
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDragLayer, useDrag } from 'react-dnd';
-export default function Line({ type, id, textId, x1, y1, x2, y2, stroke, strokeWidth, strokeOpacity, onClick }) {
+export default function ArrowLine({ type, id, textId, x1, y1, x2, y2, stroke, strokeWidth, strokeOpacity, onClick }) {
   const [{ isDragging }, dragRef] = useDrag({
     item: { type, id, textId },
     collect: (monitor) => {
@@ -37,6 +37,7 @@ export default function Line({ type, id, textId, x1, y1, x2, y2, stroke, strokeW
               stroke={stroke}
               strokeWidth={strokeWidth}
               strokeOpacity={strokeOpacity}
+              markerEnd={'url(#arrow)'}
             />
           )
         }
@@ -61,6 +62,7 @@ export default function Line({ type, id, textId, x1, y1, x2, y2, stroke, strokeW
         stroke={stroke}
         strokeWidth={strokeWidth}
         strokeOpacity={strokeOpacity}
+        markerEnd={'url(#arrow)'}
       />
     </g >
   )

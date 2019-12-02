@@ -10,16 +10,5 @@ export default function DragPreview(props) {
   }))
 
   if (!isDragging || !currentOffset) return null
-  switch (itemType) {
-    case ShapeTypes.RECTANGLE:
-        return item.preview(currentOffset, item);
-    case ShapeTypes.CIRCLE:
-      return item.preview(currentOffset, item);
-    case ShapeTypes.ANCHOR_RESIZE:
-        return item.preview(currentOffset, item);
-    case ShapeTypes.LINE:
-        return item.preview(currentOffset, item);
-    default:
-      return null
-  }
+  return item.preview(currentOffset, item);
 }

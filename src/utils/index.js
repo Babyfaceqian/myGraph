@@ -58,6 +58,13 @@ function getResizeAnchorForLine(shape) {
   return anchors;
 }
 
+function getResizeAnchorForArrowLine(shape) {
+  let anchors = [];
+  anchors.push({ cx: shape.x1, cy: shape.y1 });
+  anchors.push({ cx: shape.x2, cy: shape.y2 });
+  return anchors;
+}
+
 export function getResizeAnchorPosition(type) {
   switch (type) {
     case ShapeTypes.RECTANGLE:
@@ -66,6 +73,8 @@ export function getResizeAnchorPosition(type) {
       return getResizeAnchorForCircle;
     case ShapeTypes.LINE:
       return getResizeAnchorForLine;
+    case ShapeTypes.ARROW_LINE:
+      return getResizeAnchorForArrowLine;
   }
 }
 /**
@@ -156,6 +165,22 @@ function getDimensionForLine(cx, cy, index, shape, anchors) {
   }
   return { x1, y1, x2, y2 };
 }
+
+function getDimensionForArrowLine(cx, cy, index, shape, anchors) {
+  let x1, y1, x2, y2;
+  if (0 === index) {
+    x1 = cx;
+    y1 = cy;
+    x2 = shape.x2;
+    y2 = shape.y2;
+  } else {
+    x1 = shape.x1;
+    y1 = shape.y1;
+    x2 = cx;
+    y2 = cy;
+  }
+  return { x1, y1, x2, y2 };
+}
 /**
  * 
  * @param {*} type 根据类型返回处理函数
@@ -168,6 +193,8 @@ export function getDimensionWhenResize(type) {
       return getDimensionForCircle;
     case ShapeTypes.LINE:
       return getDimensionForLine;
+    case ShapeTypes.ARROW_LINE:
+      return getDimensionForArrowLine;
   }
 }
 function getTextDimensionInRect({ x, y, height, width }) {

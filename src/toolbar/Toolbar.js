@@ -13,6 +13,7 @@ const Toolbar = inject("store")(observer(({ store }) => {
       <button onClick={() => addShape(ShapeTypes.RECTANGLE)}>矩形</button>
       <button onClick={() => addShape(ShapeTypes.CIRCLE)}>圆形</button>
       <button onClick={() => addShape(ShapeTypes.LINE)}>直线</button>
+      <button onClick={() => addShape(ShapeTypes.ARROW_LINE)}>箭头</button>
     </div>
   )
 }))
