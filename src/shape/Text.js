@@ -1,12 +1,12 @@
 import React from 'react';
 import { useDragLayer } from 'react-dnd';
 import './Text.css';
-export default function Text({ type, id, parentId, x, y, width, height, text, fontSize, color, fontWeight, textAlign, lineHeight, verticalAlign }) {
+export default function Text({ type, id, parentId, x, y, width, height, text, fontFamily, fontSize, color, fontWeight, textAlign, lineHeight, verticalAlign }) {
   const { item, isDragging } = useDragLayer(monitor => ({
     item: monitor.getItem(),
     isDragging: !!monitor.isDragging()
   }));
-  
+
   if (isDragging && item.id === parentId) return null;
   // 上下对齐
   let justifyContent = verticalAlign === 'middle' ? 'center' : (verticalAlign === 'top' ? 'flex-start' : 'flex-end');
@@ -17,6 +17,7 @@ export default function Text({ type, id, parentId, x, y, width, height, text, fo
           justifyContent
         }}>
           <div xmlns="http://www.w3.org/1999/xhtml" style={{
+            fontFamily,
             fontSize,
             color,
             fontWeight,

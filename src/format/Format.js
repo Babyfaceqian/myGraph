@@ -99,6 +99,19 @@ const Format = inject("store")(observer(({ store }) => {
       {textConfig.includes('lineHeight') && <span className="inlineBox">
         <label>行高：</label><input type="number" min={0} step={0.1} onChange={(e) => handleTextChange(e, 'lineHeight')} value={textObj.lineHeight} />
       </span>}
+      {textConfig.includes('fontFamily') && <span className="inlineBox">
+        <label>行高：</label><select onChange={(e) => handleTextChange(e, 'fontFamily')} value={textObj.fontFamily}>
+          <option value="Helvetica">Helvetica</option>
+          <option value="Verdana">Verdana</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Garamond">Garamond</option>
+          <option value="Comic Sans MS">Comic Sans MS</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Lucida Console">Lucida Console</option>
+          <option value="Tahoma">Tahoma</option>
+        </select>
+      </span>}
     </div>
   )
 }))

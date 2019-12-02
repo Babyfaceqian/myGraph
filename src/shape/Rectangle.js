@@ -3,7 +3,7 @@ import { useDrag } from 'react-dnd';
 import { ShapeTypes } from '../constants';
 import { useDragLayer } from 'react-dnd';
 
-function Rectangle({ type, id, textId, x, y, rx, ry, fill, fillOpacity, width, height, stroke, strokeWidth, strokeOpacity, onClick, onDoubleClick }) {
+function Rectangle({ type, id, textId, x, y, rx, ry, fill, fillOpacity, width, height, stroke, strokeWidth, strokeOpacity, onClick, onDoubleClick, onMouseEnter }) {
   const [{ isDragging }, dragRef] = useDrag({
     item: { type, id, textId },
     collect: (monitor) => {
@@ -41,7 +41,7 @@ function Rectangle({ type, id, textId, x, y, rx, ry, fill, fillOpacity, width, h
   }));
 
   if (isDragging || (isAnyDragging && item.id === id)) return null
-  return <g ref={dragRef} cursor={"move"} onClick={onClick} onDoubleClick={onDoubleClick}>
+  return <g ref={dragRef} cursor={"move"} onClick={onClick} onDoubleClick={onDoubleClick} onMouseEnter={onMouseEnter}>
     <rect x={x} y={y} rx={rx} ry={ry} width={width} height={height} fill={fill} stroke={stroke} fillOpacity={fillOpacity} strokeWidth={strokeWidth} strokeOpacity={strokeOpacity}  ></rect>
   </g>
 }

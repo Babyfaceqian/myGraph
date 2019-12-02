@@ -15,7 +15,7 @@ export default function DragPreview(props) {
         return item.preview(currentOffset, item);
     case ShapeTypes.CIRCLE:
       return item.preview(currentOffset, item);
-    case ShapeTypes.ANCHOR:
+    case ShapeTypes.ANCHOR_RESIZE:
         return item.preview(currentOffset, item);
     case ShapeTypes.LINE:
         return item.preview(currentOffset, item);

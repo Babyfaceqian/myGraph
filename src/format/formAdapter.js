@@ -17,6 +17,6 @@ export function formShapeAdapter(type) {
   return arr;
 }
 export function formTextAdapter() {
-  let arr = ['fontSize', 'color', 'fontWeight', 'textAlign', 'lineHeight', 'verticalAlign'];
+  let arr = ['fontFamily', 'fontSize', 'color', 'fontWeight', 'textAlign', 'lineHeight', 'verticalAlign'];
   return arr;
 }

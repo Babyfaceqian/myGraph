@@ -4,7 +4,7 @@ import { ShapeTypes } from '../constants';
  * 
  * @param {*} shape 图形数据对象
  */
-function getAnchorForRect(shape) {
+function getResizeAnchorForRect(shape) {
   let { x, y, width, height } = shape;
   let anchors = [];
   let cx, cy;
@@ -28,7 +28,7 @@ function getAnchorForRect(shape) {
   }
   return anchors;
 }
-function getAnchorForCircle(shape) {
+function getResizeAnchorForCircle(shape) {
   let { cx: x, cy: y, r } = shape;
   let anchors = [];
   let cx, cy;
@@ -51,21 +51,21 @@ function getAnchorForCircle(shape) {
   return anchors;
 }
 
-function getAnchorForLine(shape) {
+function getResizeAnchorForLine(shape) {
   let anchors = [];
   anchors.push({ cx: shape.x1, cy: shape.y1 });
   anchors.push({ cx: shape.x2, cy: shape.y2 });
   return anchors;
 }
 
-export function getAnchorPosition(type) {
+export function getResizeAnchorPosition(type) {
   switch (type) {
     case ShapeTypes.RECTANGLE:
-      return getAnchorForRect;
+      return getResizeAnchorForRect;
     case ShapeTypes.CIRCLE:
-      return getAnchorForCircle;
+      return getResizeAnchorForCircle;
     case ShapeTypes.LINE:
-      return getAnchorForLine;
+      return getResizeAnchorForLine;
   }
 }
 /**
@@ -191,5 +191,72 @@ export function getTextDimension(type) {
       return getTextDimensionInRect;
     case ShapeTypes.CIRCLE:
       return getTextDimensionInCircle;
+  }
+}
+
+/**
+ * 
+ * @param {*} shape 图形数据对象
+ */
+function getLinkAnchorForRect(shape) {
+  let { x, y, width, height } = shape;
+  let anchors = [];
+  let halfWidth = width / 2;
+  let halfHeight = height / 2;
+  anchors[0] = {
+    cx: x + halfWidth,
+    cy: y - 10
+  };
+  anchors[1] = {
+    cx: x + width + 10,
+    cy: y + halfHeight
+  };
+  anchors[2] = {
+    cx: x + halfWidth,
+    cy: y + height + 10
+  };
+  anchors[3] = {
+    cx: x - 10,
+    cy: y + halfHeight
+  };
+  return anchors;
+}
+function getLinkAnchorForCircle(shape) {
+  let { cx: x, cy: y, r } = shape;
+  let anchors = [];
+  anchors[0] = {
+    cx: x,
+    cy: y - r - 10
+  };
+  anchors[1] = {
+    cx: x + r + 10,
+    cy: y
+  };
+  anchors[2] = {
+    cx: x,
+    cy: y + r + 10
+  };
+  anchors[3] = {
+    cx: x - r - 10,
+    cy: y
+  };
+  return anchors;
+}
+
+function getLinkAnchorForLine(shape) {
+  let anchors = [];
+  anchors.push({ cx: shape.x1, cy: shape.y1 });
+  anchors.push({ cx: shape.x2, cy: shape.y2 });
+  return anchors;
+}
+
+export function getLinkAnchorPosition(type) {
+  switch (type) {
+    case ShapeTypes.RECTANGLE:
+      return getLinkAnchorForRect;
+    case ShapeTypes.CIRCLE:
+      return getLinkAnchorForCircle;
+    case ShapeTypes.LINE:
+      return getLinkAnchorForLine;
   }
 }

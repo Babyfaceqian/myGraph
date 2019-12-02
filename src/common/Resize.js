@@ -2,8 +2,8 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 import { toJS } from 'mobx';
 import { ShapeTypes } from '../constants';
-import Anchor from '../shape/anchor';
-import { getAnchorPosition, getDimensionWhenResize, getTextDimension } from '../utils';
+import AnchorResize from '../shape/anchorResize';
+import { getResizeAnchorPosition, getDimensionWhenResize, getTextDimension } from '../utils';
 import { useDragLayer } from 'react-dnd'
 
 const cursorMap = ['nw-resize', 'n-resize', 'ne-resize', 'e-resize', 'se-resize', 's-resize', 'sw-resize', 'w-resize'];
@@ -19,7 +19,7 @@ const Resize = inject("store")(observer(({ store }) => {
   let shape = shapes[selectIds[0]];
   let shapeType = shape.type;
   let id = shape.id;
-  let anchors = getAnchorPosition(shapeType)(shape);
+  let anchors = getResizeAnchorPosition(shapeType)(shape);
   const onDrop = function (cx, cy, type, index) {
     let changes = getDimensionWhenResize(type)(cx, cy, index, shape, anchors);
     console.log('changes', changes);
@@ -49,7 +49,7 @@ const Resize = inject("store")(observer(({ store }) => {
           let changes = getDimensionWhenResize(shapeType)(cx, cy, i, shape, anchors);
 
           let newShape = { ...shape, ...changes };
-          let newAnchors = getAnchorPosition(shapeType)(newShape);
+          let newAnchors = getResizeAnchorPosition(shapeType)(newShape);
           let { x, y, rx, ry, width, height, fill, stroke, fillOpacity, strokeWidth, strokeOpacity } = newShape;
           return (
             [
@@ -65,7 +65,7 @@ const Resize = inject("store")(observer(({ store }) => {
             ))
         };
         return (
-          <Anchor key={i} id={id} cursor={cursorMap[i]} cx={cx} cy={cy} onDrop={(cx, cy) => onDrop(cx, cy, ShapeTypes.RECTANGLE, i)} preview={preview} />
+          <AnchorResize key={i} id={id} cursor={cursorMap[i]} cx={cx} cy={cy} onDrop={(cx, cy) => onDrop(cx, cy, ShapeTypes.RECTANGLE, i)} preview={preview} />
         )
       });
     case ShapeTypes.CIRCLE:
@@ -77,7 +77,7 @@ const Resize = inject("store")(observer(({ store }) => {
           let changes = getDimensionWhenResize(shapeType)(cx, cy, i, shape, anchors);
 
           let newShape = { ...shape, ...changes };
-          let newAnchors = getAnchorPosition(shapeType)(newShape);
+          let newAnchors = getResizeAnchorPosition(shapeType)(newShape);
           let { cx: x, cy: y, r, fill, stroke, fillOpacity, strokeWidth, strokeOpacity } = newShape;
           return (
             [
@@ -93,7 +93,7 @@ const Resize = inject("store")(observer(({ store }) => {
             ))
         };
         return (
-          <Anchor key={i} id={id} cursor={cursorMap[i]} cx={cx} cy={cy} onDrop={(cx, cy) => onDrop(cx, cy, ShapeTypes.CIRCLE, i)} preview={preview} />
+          <AnchorResize key={i} id={id} cursor={cursorMap[i]} cx={cx} cy={cy} onDrop={(cx, cy) => onDrop(cx, cy, ShapeTypes.CIRCLE, i)} preview={preview} />
         )
       })
     case ShapeTypes.LINE:
@@ -104,7 +104,7 @@ const Resize = inject("store")(observer(({ store }) => {
           let cy = offset.y - item.oy;
           let changes = getDimensionWhenResize(shapeType)(cx, cy, i, shape, anchors);
           let newShape = { ...shape, ...changes };
-          let newAnchors = getAnchorPosition(shapeType)(newShape);
+          let newAnchors = getResizeAnchorPosition(shapeType)(newShape);
           let { x1, y1, x2, y2, stroke, strokeWidth, strokeOpacity } = newShape;
           return (
             [
@@ -128,7 +128,7 @@ const Resize = inject("store")(observer(({ store }) => {
             ))
         };
         return (
-          <Anchor key={i} id={id} cursor={'pointer'} cx={cx} cy={cy} onDrop={(cx, cy) => onDrop(cx, cy, ShapeTypes.LINE, i)} preview={preview} />
+          <AnchorResize key={i} id={id} cursor={'pointer'} cx={cx} cy={cy} onDrop={(cx, cy) => onDrop(cx, cy, ShapeTypes.LINE, i)} preview={preview} />
         )
       })
   }

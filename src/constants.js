@@ -1,7 +1,8 @@
 export const ShapeTypes = {
   RECTANGLE: 'rectangle',
   CIRCLE: 'circle',
-  ANCHOR: 'anchor',
+  ANCHOR_RESIZE: 'anchorResize',
+  ANCHOR_LINK: 'anchorLink',
   TEXT: 'text',
   LINE: 'line'
 }

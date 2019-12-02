@@ -44,6 +44,7 @@ function getText() {
     width: 100,
     height: 60,
     text: '文本',
+    fontFamily: 'Comic Sans MS',
     fontSize: 12,
     color: '#000000',
     fontWeight: 'normal',

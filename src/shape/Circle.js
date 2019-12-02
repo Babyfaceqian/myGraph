@@ -3,7 +3,7 @@ import { useDrag } from 'react-dnd';
 import { ShapeTypes } from '../constants';
 import { useDragLayer } from 'react-dnd';
 
-function Circle({ type, id, textId, cx, cy, r, fill, fillOpacity, stroke, strokeWidth, strokeOpacity, onClick, onDoubleClick }) {
+function Circle({ type, id, textId, cx, cy, r, fill, fillOpacity, stroke, strokeWidth, strokeOpacity, onClick, onDoubleClick, onMouseEnter }) {
   const [{ isDragging }, dragRef] = useDrag({
     item: { type, id, textId, r },
     collect: (monitor) => {
@@ -37,7 +37,7 @@ function Circle({ type, id, textId, cx, cy, r, fill, fillOpacity, stroke, stroke
     isResizing: !!monitor.isDragging()
   }));
   if (isDragging || (isResizing && item.id === id)) return null
-  return <g cursor={"move"} onClick={onClick} onDoubleClick={onDoubleClick}>
+  return <g cursor={"move"} onClick={onClick} onDoubleClick={onDoubleClick} onMouseEnter={onMouseEnter}>
     <circle ref={dragRef} cx={cx} cy={cy} r={r} fill={fill} stroke={stroke} fillOpacity={fillOpacity} strokeWidth={strokeWidth} strokeOpacity={strokeOpacity}  ></circle>
   </g>
 }

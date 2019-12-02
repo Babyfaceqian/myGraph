@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDrop } from 'react-dnd';
 import Rectangle from '../shape/Rectangle';
 import Circle from '../shape/Circle';
@@ -10,6 +10,7 @@ import { observer, inject } from 'mobx-react';
 import { toJS } from 'mobx';
 import DragPreview from '../shape/DragPreview';
 import { getTextDimension } from '../utils';
+import Link from '../common/Link';
 
 function handleShapeClick(e, id, store) {
   console.log('EVENT: handleShapeClick')
@@ -24,8 +25,31 @@ function handleShapeDoubleClick(e, id, store) {
   e.stopPropagation();
   store.changeMode(2);
 }
+function handleMouseEnter(e, id, store) {
+  console.log('EVENT: handleMouseEnter')
+  e.stopPropagation();
+  store.highlight(id);
+}
+
 const Board = inject("store")(observer(({ store }) => {
   const shapes = toJS(store.shapes);
+  useEffect(() => {
+    // 添加事件监听
+    const handleKeyDown = (e) => {
+      let selectIds = toJS(store.selectIds);
+      let mode = store.mode;
+      if (mode !== 2 && (e.keyCode === 8 || e.keyCode === 46) && selectIds.length > 0) {
+        store.select([]);
+        store.deleteShape(selectIds);
+      }
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      // 移除事件监听
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  });
+  // 拖拽
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: Object.values(ShapeTypes),
     drop: (item, monitor) => {
@@ -63,7 +87,7 @@ const Board = inject("store")(observer(({ store }) => {
             });
           }
           break;
-        case ShapeTypes.ANCHOR:
+        case ShapeTypes.ANCHOR_RESIZE:
           return offset;
         case ShapeTypes.LINE:
           let x1 = offset.x - item.ox1;
@@ -101,9 +125,9 @@ const Board = inject("store")(observer(({ store }) => {
         let shape = shapes[key];
         switch (shape.type) {
           case ShapeTypes.RECTANGLE:
-            return <Rectangle key={key} {...shape} onClick={(e) => handleShapeClick(e, key, store)} onDoubleClick={e => handleShapeDoubleClick(e, key, store)} />;
+            return <Rectangle key={key} {...shape} onClick={(e) => handleShapeClick(e, key, store)} onDoubleClick={e => handleShapeDoubleClick(e, key, store)} onMouseEnter={e => handleMouseEnter(e, key, store)} />;
           case ShapeTypes.CIRCLE:
-            return <Circle key={key} {...shape} onClick={(e) => handleShapeClick(e, key, store)} onDoubleClick={e => handleShapeDoubleClick(e, key, store)} />;
+            return <Circle key={key} {...shape} onClick={(e) => handleShapeClick(e, key, store)} onDoubleClick={e => handleShapeDoubleClick(e, key, store)} onMouseEnter={e => handleMouseEnter(e, key, store)} />;
           case ShapeTypes.TEXT:
             return <Text key={key} {...shape} />;
           case ShapeTypes.LINE:
@@ -111,6 +135,7 @@ const Board = inject("store")(observer(({ store }) => {
         }
       })}
       <Resize />
+      <Link />
       <DragPreview />
     </svg>
   );
