@@ -52,9 +52,13 @@ function getResizeAnchorForCircle(shape) {
 }
 
 function getResizeAnchorForLine(shape) {
-  let anchors = [];
-  anchors.push({ cx: shape.x1, cy: shape.y1 });
-  anchors.push({ cx: shape.x2, cy: shape.y2 });
+  let anchors = shape.points.map(d => {
+    return {
+      cx: d.x,
+      cy: d.y,
+      pre: d.pre
+    };
+  })
   return anchors;
 }
 
@@ -151,19 +155,26 @@ function getDimensionForCircle(cx, cy, index, shape, anchors) {
   return { cx: _cx, cy: _cy, r }
 }
 function getDimensionForLine(cx, cy, index, shape, anchors) {
-  let x1, y1, x2, y2;
-  if (0 === index) {
-    x1 = cx;
-    y1 = cy;
-    x2 = shape.x2;
-    y2 = shape.y2;
-  } else {
-    x1 = shape.x1;
-    y1 = shape.y1;
-    x2 = cx;
-    y2 = cy;
-  }
-  return { x1, y1, x2, y2 };
+  let points = shape.points;
+  let newPoints = points.map((d, i) => {
+    let pre = d.pre;
+    let x = d.x;
+    let y = d.y;
+    if (index === i) {
+      x = cx;
+      y = cy;
+      pre = false;
+      return { x, y, pre };
+    }
+    if (pre) {
+      let prevPoint = index === i - 1 ? { x: cx, y: cy } : points[i - 1];
+      let nextPoint = index === i + 1 ? { x: cx, y: cy } : points[i + 1];
+      x = (prevPoint.x + nextPoint.x) / 2;
+      y = (prevPoint.y + nextPoint.y) / 2;
+    }
+    return { x, y, pre };
+  })
+  return { points: newPoints };
 }
 
 function getDimensionForArrowLine(cx, cy, index, shape, anchors) {
@@ -286,4 +297,57 @@ export function getLinkAnchorPosition(type) {
     case ShapeTypes.LINE:
       return getLinkAnchorForLine;
   }
+}
+
+export function getPathByPoints(points) {
+  let path = '';
+  let length = points.length;
+  points.forEach((p, i) => {
+    if (0 === i) {
+      path += `M${p.x} ${p.y}`;
+    } else {
+      path += ` L${p.x} ${p.y}`;
+    }
+    // if (length === i) {
+    //   path += ' Z'
+    // }
+  });
+  return path;
+}
+
+export function getPointsByPath(path) {
+  let str = path.replace(/[a-zA-Z]/g, '');
+  str = path.replace(/[\s]*/g, ' ');
+  let arr = str.split(' ');
+  let points = [];
+  arr.forEach((d, i) => {
+    let index = parseInt(i / 2);
+    let property = i % 2 === 0 ? 'x' : 'y';
+    if (!points[index]) {
+      points[index] = {};
+    }
+    points[index][property] = d;
+  });
+  return points;
+}
+
+export function getPointsWithPre(points) {
+  points = points.filter(d => !d.pre);
+  let newPoints = [];
+  points.reduce((prev, cur) => {
+    if (prev) {
+      newPoints.push({
+        x: (prev.x + cur.x) / 2,
+        y: (prev.y + cur.y) / 2,
+        pre: true
+      });
+    }
+    newPoints.push({
+      x: cur.x,
+      y: cur.y
+    });
+    return cur;
+  }, null);
+  console.log('newPoints', newPoints);
+  return newPoints;
 }

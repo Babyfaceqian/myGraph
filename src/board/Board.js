@@ -93,13 +93,19 @@ const Board = inject("store")(observer(({ store }) => {
           return offset;
         case ShapeTypes.LINE:
           {
-            let x1 = offset.x - item.ox1;
-            let y1 = offset.y - item.oy1;
-            let x2 = offset.x - item.ox2;
-            let y2 = offset.y - item.oy2;
+            let points = item.points;
+            let dx = offset.x - item.beginOffset.x;
+            let dy = offset.y - item.beginOffset.y;
+            let newPoints = points.map(d => {
+              return {
+                x: d.x + dx,
+                y: d.y + dy,
+                pre: d.pre
+              }
+            });
             store.modifyShape({
               id: item.id,
-              x1, y1, x2, y2
+              points: newPoints
             })
           }
         // if (item.textId) {

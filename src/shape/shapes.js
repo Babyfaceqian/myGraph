@@ -58,11 +58,7 @@ function getLine() {
   return {
     type: null,
     id: null,
-    x1: 100,
-    y1: 100,
-    x2: 200,
-    y2: 200,
-    text: '文本',
+    points: [{ x: 100, y: 100, pre: false }, { x: 150, y: 150, pre: true }, { x: 200, y: 200, pre: false }],
     fontSize: 12,
     stroke: '#000000',
     strokeWidth: 1,

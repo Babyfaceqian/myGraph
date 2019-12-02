@@ -3,7 +3,7 @@ import { observer, inject } from 'mobx-react';
 import { toJS } from 'mobx';
 import { ShapeTypes } from '../constants';
 import AnchorResize from '../shape/anchorResize';
-import { getResizeAnchorPosition, getDimensionWhenResize, getTextDimension } from '../utils';
+import { getResizeAnchorPosition, getDimensionWhenResize, getTextDimension, getPathByPoints, getPointsWithPre } from '../utils';
 import { useDragLayer } from 'react-dnd'
 
 const cursorMap = ['nw-resize', 'n-resize', 'ne-resize', 'e-resize', 'se-resize', 's-resize', 'sw-resize', 'w-resize'];
@@ -23,6 +23,9 @@ const Resize = inject("store")(observer(({ store }) => {
   const onDrop = function (cx, cy, type, index) {
     let changes = getDimensionWhenResize(type)(cx, cy, index, shape, anchors);
     console.log('changes', changes);
+    if (ShapeTypes.LINE === type) {
+      changes.points = getPointsWithPre(changes.points);
+    }
     store.modifyShape({ id, ...changes });
     // 文本
     if (shape.textId) {
@@ -98,37 +101,38 @@ const Resize = inject("store")(observer(({ store }) => {
       })
     case ShapeTypes.LINE:
       return anchors.map((placement, i) => {
-        let { cx, cy } = placement;
+        let { cx, cy, pre } = placement;
         const preview = function (offset, item) {
           let cx = offset.x - item.ox;
           let cy = offset.y - item.oy;
           let changes = getDimensionWhenResize(shapeType)(cx, cy, i, shape, anchors);
+          console.log('changes', changes.points);
           let newShape = { ...shape, ...changes };
           let newAnchors = getResizeAnchorPosition(shapeType)(newShape);
-          let { x1, y1, x2, y2, stroke, strokeWidth, strokeOpacity } = newShape;
+          let { points, stroke, strokeWidth, strokeOpacity } = newShape;
+          let d = getPathByPoints(points);
           return (
             [
-              <line
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
+              <path
+                d={d}
                 stroke={stroke}
                 strokeWidth={strokeWidth}
                 strokeOpacity={strokeOpacity}
+                fill={'none'}
               />
             ].concat(newAnchors.map((placement, i) => {
-              let { cx, cy } = placement;
+              let { cx, cy, pre } = placement;
+              let fillOpacity = pre ? 0.15 : 0.5;
               return (
                 <g cursor={'pointer'}>
-                  <circle cx={cx} cy={cy} r={5} fill={"blue"} fillOpacity={0.5}></circle>
+                  <circle cx={cx} cy={cy} r={5} fill={"blue"} fillOpacity={fillOpacity}></circle>
                 </g>
               )
             })
             ))
         };
         return (
-          <AnchorResize key={i} id={id} cursor={'pointer'} cx={cx} cy={cy} onDrop={(cx, cy) => onDrop(cx, cy, ShapeTypes.LINE, i)} preview={preview} />
+          <AnchorResize key={i} id={id} cursor={'pointer'} cx={cx} cy={cy} onDrop={(cx, cy) => onDrop(cx, cy, ShapeTypes.LINE, i)} preview={preview} pre={pre}/>
         )
       });
     case ShapeTypes.ARROW_LINE:

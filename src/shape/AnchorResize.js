@@ -3,7 +3,7 @@ import { useDrag } from 'react-dnd';
 import { ShapeTypes } from '../constants';
 import { useDragLayer } from 'react-dnd';
 
-export default function AnchorResize({ cx, cy, r = 5, onDrop, cursor, preview, id }) {
+export default function AnchorResize({ cx, cy, r = 5, onDrop, cursor, preview, id, pre }) {
 
   const [{ }, dragRef] = useDrag({
     item: { type: ShapeTypes.ANCHOR_RESIZE, id },
@@ -45,9 +45,10 @@ export default function AnchorResize({ cx, cy, r = 5, onDrop, cursor, preview, i
     isDragging: monitor.isDragging()
   }));
   if (itemType !== ShapeTypes.ANCHOR_RESIZE && isDragging && item.id === id) return null
+  let fillOpacity = pre ? 0.15 : 0.5;
   return (
     <g cursor={cursor}>
-      <circle ref={dragRef} cx={cx} cy={cy} r={r} fill={"blue"} fillOpacity={0.5}></circle>
+      <circle ref={dragRef} cx={cx} cy={cy} r={r} fill={"blue"} fillOpacity={fillOpacity}></circle>
     </g>
   )
 }
