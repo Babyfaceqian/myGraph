@@ -3,16 +3,13 @@ import { useDrop } from 'react-dnd';
 import Rectangle from '../shape/Rectangle';
 import Circle from '../shape/Circle';
 import Text from '../shape/Text';
-import Resize from '../common/Resize';
 import Line from '../shape/Line';
 import { ShapeTypes } from '../constants';
 import { observer, inject } from 'mobx-react';
 import { toJS } from 'mobx';
 import DragPreview from '../shape/DragPreview';
 import { getTextDimension } from '../utils';
-import Extend from '../common/Extend';
 import ArrowLine from '../shape/ArrowLine';
-import Defs from '../shape/Defs';
 
 function handleShapeClick(e, id, store) {
   console.log('EVENT: handleShapeClick')
@@ -35,6 +32,7 @@ function handleMouseEnter(e, id, store) {
 
 const Board = inject("store")(observer(({ store }) => {
   const shapes = toJS(store.shapes);
+  const selectIds = toJS(store.selectIds);
   useEffect(() => {
     // 添加事件监听
     const handleKeyDown = (e) => {
@@ -152,21 +150,45 @@ const Board = inject("store")(observer(({ store }) => {
         let shape = shapes[key];
         switch (shape.type) {
           case ShapeTypes.RECTANGLE:
-            return <Rectangle key={key} {...shape} onClick={(e) => handleShapeClick(e, key, store)} onDoubleClick={e => handleShapeDoubleClick(e, key, store)} onMouseEnter={e => handleMouseEnter(e, key, store)} />;
+            return <Rectangle
+              key={key}
+              {...shape}
+              store={store}
+              isSelected={selectIds.includes(shape.id)}
+              onClick={(e) => handleShapeClick(e, key, store)}
+              onDoubleClick={e => handleShapeDoubleClick(e, key, store)}
+              onMouseEnter={e => handleMouseEnter(e, key, store)}
+            />;
           case ShapeTypes.CIRCLE:
-            return <Circle key={key} {...shape} onClick={(e) => handleShapeClick(e, key, store)} onDoubleClick={e => handleShapeDoubleClick(e, key, store)} onMouseEnter={e => handleMouseEnter(e, key, store)} />;
+            return <Circle
+              key={key}
+              {...shape}
+              store={store}
+              isSelected={selectIds.includes(shape.id)}
+              onClick={(e) => handleShapeClick(e, key, store)}
+              onDoubleClick={e => handleShapeDoubleClick(e, key, store)}
+              onMouseEnter={e => handleMouseEnter(e, key, store)}
+            />;
           case ShapeTypes.TEXT:
             return <Text key={key} {...shape} />;
           case ShapeTypes.LINE:
-            return <Line key={key} {...shape} onClick={(e) => handleShapeClick(e, key, store)} />;
+            return <Line
+              key={key}
+              {...shape}
+              store={store}
+              onClick={(e) => handleShapeClick(e, key, store)}
+            />;
           case ShapeTypes.ARROW_LINE:
-            return <ArrowLine key={key} {...shape} onClick={(e) => handleShapeClick(e, key, store)} />;
+            return <ArrowLine
+              key={key}
+              {...shape}
+              onClick={(e) => handleShapeClick(e, key, store)}
+              store={store}
+              isSelected={selectIds.includes(shape.id)}
+            />;
         }
       })}
-      <Resize />
-      <Extend />
       <DragPreview />
-      <Defs />
     </svg>
   );
 }))
