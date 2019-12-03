@@ -1,18 +1,47 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDrag } from 'react-dnd';
+import { ShapeTypes } from '../constants';
 import { useDragLayer } from 'react-dnd';
 
-export default function AnchorLink({ x, y, rotate }) {
-  let [isOver, setIsOver] = useState(false);
-  let fillOpacity = isOver ? 1 : 0.15;
+export default function AnchorLink({ cx, cy, r = 5, onDrop, cursor, preview, id, pre }) {
+
+  const [{ }, dragRef] = useDrag({
+    item: { type: ShapeTypes.ANCHOR_RESIZE, id },
+    collect: (monitor) => {
+      return {};
+    },
+    begin: (monitor) => {
+      let offset = monitor.getClientOffset() || {};
+      return {
+        type: ShapeTypes.ANCHOR_RESIZE,
+        id,
+        ox: offset.x - cx,
+        oy: offset.y - cy,
+        preview
+      }
+    },
+    end: (item, monitor) => {
+      
+      if (monitor.didDrop()) {
+        let offset = monitor.getDropResult();
+        console.log('end offset', offset);
+        let _cx = offset.x - item.ox;
+        let _cy = offset.y - item.oy;
+        onDrop(_cx, _cy);
+      }
+    }
+  });
   // 拖拽当前图形时不显示锚点
-  const { item, isDragging } = useDragLayer(monitor => ({
+  const { item, itemType, isDragging } = useDragLayer(monitor => ({
     item: monitor.getItem(),
+    itemType: monitor.getItemType(),
+    // currentOffset: monitor.getSourceClientOffset(),
     isDragging: monitor.isDragging()
   }));
-  if (isDragging) return null
+  if (itemType !== ShapeTypes.ANCHOR_LINK && isDragging && item.id === id) return null
   return (
-    <g cursor={'pointer'} transform={`translate(${x} ${y}) rotate(${rotate})`} fill={'#999'} fillOpacity={fillOpacity} onMouseEnter={() => setIsOver(true)} onMouseLeave={() => setIsOver(false)}>
-      <polygon points="0,-2 8,-2 8,-4 14,0 8,4 8,2 0,2" />
+    <g cursor={cursor}>
+      <circle ref={dragRef} cx={cx} cy={cy} r={r} fill={"blue"} fillOpacity={0.15}></circle>
     </g>
   )
 }

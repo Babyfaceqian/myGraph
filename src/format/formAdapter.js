@@ -12,6 +12,9 @@ export function formShapeAdapter(type) {
     case ShapeTypes.LINE:
       arr = ['stroke', 'strokeWidth', 'strokeOpacity'];
       break;
+    case ShapeTypes.ARROW_LINE:
+      arr = ['stroke', 'strokeWidth', 'strokeOpacity'];
+      break;
   }
   // hasText && arr.concat(['fontSize', 'color', 'fontWeight', 'textAlign']);
   return arr;

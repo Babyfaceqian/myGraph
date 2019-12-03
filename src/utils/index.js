@@ -63,9 +63,13 @@ function getResizeAnchorForLine(shape) {
 }
 
 function getResizeAnchorForArrowLine(shape) {
-  let anchors = [];
-  anchors.push({ cx: shape.x1, cy: shape.y1 });
-  anchors.push({ cx: shape.x2, cy: shape.y2 });
+  let anchors = shape.points.map(d => {
+    return {
+      cx: d.x,
+      cy: d.y,
+      pre: d.pre
+    };
+  })
   return anchors;
 }
 
@@ -178,19 +182,26 @@ function getDimensionForLine(cx, cy, index, shape, anchors) {
 }
 
 function getDimensionForArrowLine(cx, cy, index, shape, anchors) {
-  let x1, y1, x2, y2;
-  if (0 === index) {
-    x1 = cx;
-    y1 = cy;
-    x2 = shape.x2;
-    y2 = shape.y2;
-  } else {
-    x1 = shape.x1;
-    y1 = shape.y1;
-    x2 = cx;
-    y2 = cy;
-  }
-  return { x1, y1, x2, y2 };
+  let points = shape.points;
+  let newPoints = points.map((d, i) => {
+    let pre = d.pre;
+    let x = d.x;
+    let y = d.y;
+    if (index === i) {
+      x = cx;
+      y = cy;
+      pre = false;
+      return { x, y, pre };
+    }
+    if (pre) {
+      let prevPoint = index === i - 1 ? { x: cx, y: cy } : points[i - 1];
+      let nextPoint = index === i + 1 ? { x: cx, y: cy } : points[i + 1];
+      x = (prevPoint.x + nextPoint.x) / 2;
+      y = (prevPoint.y + nextPoint.y) / 2;
+    }
+    return { x, y, pre };
+  })
+  return { points: newPoints };
 }
 /**
  * 

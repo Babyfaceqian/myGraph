@@ -100,8 +100,15 @@ export default class Store {
       if (textId) {
         delete this.shapes[textId];
       }
+      if (this.selectIds.includes(id)) {
+        this.selectIds = this.selectIds.filter(d => d !== id);
+      }
       delete this.shapes[id];
-    })
+    });
+
+    if (ids.includes(this.highlightId)) {
+      this.highlightId = null;
+    }
   }
   @action.bound
   highlight(id) {
